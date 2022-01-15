@@ -1,0 +1,28 @@
+---
+- name: Check if yadm has already been installed
+  stat:
+    path: "{{ yadm_install_dir }}"
+  register: yadm_installed
+
+- name: Download yadm
+  get_url:
+    url: "{{ yadm_download_url }}"
+    dest: "{{ yadm_install_prefix }}"
+    checksum: "{{ yadm_download_checksum_algorithm }}:{{ yadm_download_checksum }}"
+  when: not yadm_installed.stat.exists
+
+- name: Install yadm
+  unarchive:
+    src: "{{ yadm_install_prefix }}/yadm-{{ yadm_version }}.tar.gz"
+    dest: "{{ yadm_install_prefix }}"
+    creates: "{{ yadm_install_prefix }}/yadm"
+    owner: "{{ yadm_owner }}"
+    group: "{{ yadm_group }}"
+    mode: 0755
+    remote_src: true
+
+- name: Link yadm to bin dir
+  file:
+    src: "{{ yadm_install_dir }}/yadm"
+    dest: "{{ yadm_bin_dir }}/yadm"
+    state: link
