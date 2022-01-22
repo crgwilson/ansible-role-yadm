@@ -17,9 +17,12 @@ def test_default_files(host):
 
 def test_default_cloned_dotfiles(host):
     d = host.file("/root/.yadm")
+    assert not d.is_directory
+
+    d = host.file("/root/.config/yadm")
     assert d.is_directory
 
-    f = host.file("/root/.yadm/bootstrap")
+    f = host.file("/root/.config/yadm/bootstrap")
     assert f.is_file
 
     d = host.file("/root/zsh")
