@@ -13,14 +13,3 @@ def test_default_files(host):
 
     b = host.file("/root/bin/yadm")
     assert b.is_symlink
-
-
-def test_default_cloned_dotfiles(host):
-    d = host.file("/root/.yadm")
-    assert d.is_directory
-
-    f = host.file("/root/.yadm/bootstrap")
-    assert f.is_file
-
-    d = host.file("/root/zsh")
-    assert d.is_directory

@@ -57,7 +57,7 @@ def main():
 
     result = dict(changed=False, warnings=list())
 
-    yadm_dir = "%s/.yadm" % (dest)
+    yadm_dir = "%s/.local/share/yadm/repo.git" % (dest)
     if isdir(yadm_dir):
         if update:
             pull(module, executable, dest)
