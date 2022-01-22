@@ -1,0 +1,18 @@
+---
+- name: Converge
+  hosts: all
+
+  vars:
+    yadm_install_prefix: /root/lib
+    yadm_bin_dir: /root/bin
+
+  tasks:
+    - name: "Include ansible-role-yadm"
+      include_role:
+        name: "ansible-role-yadm"
+
+    - name: "Test yadm module"
+      yadm:
+        repo: "https://github.com/crgwilson/all-of-the-dots.git"
+        dest: "/root"
+        executable: "/root/bin/yadm"

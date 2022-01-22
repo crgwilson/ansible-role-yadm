@@ -1,0 +1,29 @@
+---
+- name: Prepare
+  hosts: all
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+      when: ansible_distribution == "Debian"
+
+    - name: Update yum cache
+      yum:
+        update_cache: true
+      when: ansible_distribution == "CentOS"
+
+    - name: Install git
+      package:
+        name: git
+
+    - name: Create custom install dirs
+      file:
+        path: "{{ item }}"
+        owner: root
+        group: root
+        mode: 0755
+        state: directory
+      loop:
+        - /root/lib
+        - /root/bin

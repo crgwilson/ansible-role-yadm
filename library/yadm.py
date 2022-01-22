@@ -29,13 +29,13 @@ def run_cmd(module, cmd, cwd=None):
         )
 
 
-def clone(module, repo, dest):
-    cmd = "yadm clone %s" % (repo)
+def clone(module, executable, repo, dest):
+    cmd = "%s clone %s" % (executable, repo)
     run_cmd(module, cmd, dest)
 
 
-def pull(module, dest):
-    cmd = "yadm pull"
+def pull(module, executable, dest):
+    cmd = "%s pull" % (executable)
     run_cmd(module, cmd, dest)
 
 
@@ -45,6 +45,7 @@ def main():
             repo=dict(required=True),
             dest=dict(type="path"),
             update=dict(type="bool", default=False),
+            executable=dict(type="path", default="yadm"),
         ),
         supports_check_mode=True,
     )
@@ -52,17 +53,19 @@ def main():
     repo = module.params["repo"]
     dest = module.params["dest"]
     update = module.params["update"]
+    executable = module.params["executable"]
 
     result = dict(changed=False, warnings=list())
 
     yadm_dir = "%s/.yadm" % (dest)
     if isdir(yadm_dir):
         if update:
-            pull(module, dest)
+            pull(module, executable, dest)
             result["changed"] = True
     else:
         clone(
             module,
+            executable,
             repo,
             dest,
         )
